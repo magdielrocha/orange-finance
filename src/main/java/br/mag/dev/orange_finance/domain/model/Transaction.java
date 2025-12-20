@@ -38,6 +38,20 @@ public class Transaction {
     public Transaction() {
     }
 
+    public Transaction(String description, TransactionType transactionType, ExpenseCategory expenseCategory,
+                       IncomeSource incomeSource,
+                       LocalDate transactionDate,
+                       BigDecimal amount,
+                       User user) {
+        this.description = description;
+        this.transactionType = transactionType;
+        this.expenseCategory = expenseCategory;
+        this.incomeSource = incomeSource;
+        this.transactionDate = transactionDate;
+        this.amount = amount;
+        this.user = user;
+    }
+
     public Long getId() {
         return id;
     }
