@@ -5,6 +5,7 @@ import br.mag.dev.orange_finance.domain.enums.TransactionType;
 import br.mag.dev.orange_finance.domain.model.Transaction;
 import br.mag.dev.orange_finance.repository.TransactionRepository;
 import br.mag.dev.orange_finance.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -18,6 +19,7 @@ public class TransactionService {
         this.transactionRepository = transactionRepository;
     }
 
+    @Transactional
     public Transaction createTransaction(CreateTransactionDto dto) {
 
         var user = userRepository.findById(dto.userId())
