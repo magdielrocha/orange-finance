@@ -1,5 +1,6 @@
 package br.mag.dev.orange_finance.domain.model;
 
+import br.mag.dev.orange_finance.domain.enums.UserRole;
 import jakarta.persistence.*;
 
 

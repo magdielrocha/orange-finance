@@ -1,5 +1,8 @@
 package br.mag.dev.orange_finance.domain.model;
 
+import br.mag.dev.orange_finance.domain.enums.ExpenseCategory;
+import br.mag.dev.orange_finance.domain.enums.IncomeSource;
+import br.mag.dev.orange_finance.domain.enums.TransactionType;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
