@@ -23,17 +23,17 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     @Column (nullable = false)
-    private UserRole role;
+    private UserRole userRole;
 
 
     public User() {
     }
 
-    public User(String fullName, String email, String password, UserRole role) {
+    public User(String fullName, String email, String password, UserRole userRole) {
         this.fullName = fullName;
         this.email = email;
         this.password = password;
-        this.role = role;
+        this.userRole = userRole;
     }
 
     public Long getId() {
@@ -68,11 +68,13 @@ public class User {
         this.password = password;
     }
 
-    public UserRole getRole() {
-        return role;
+    public UserRole getUserRole() {
+        return userRole;
     }
 
-    public void setRole(UserRole role) {
-        this.role = role;
+    public void setUserRole(UserRole userRole) {
+        this.userRole = userRole;
     }
+
+
 }
