@@ -2,11 +2,12 @@ package br.mag.dev.orange_finance.domain.dto;
 
 import br.mag.dev.orange_finance.domain.enums.UserRole;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public record CreateUserDto(@NotBlank String fullName,
                             @NotBlank String email,
                             @NotBlank String password,
-                            @NotBlank UserRole userRole) {
+                            @NotNull UserRole userRole) {
 
 }
 
