@@ -2,6 +2,7 @@ package br.mag.dev.orange_finance.service;
 
 import br.mag.dev.orange_finance.domain.dto.CreateUserDto;
 import br.mag.dev.orange_finance.domain.model.User;
+import br.mag.dev.orange_finance.exception.BusinessException;
 import br.mag.dev.orange_finance.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
@@ -20,7 +21,7 @@ public class UserService {
 
         var existingUser = userRepository.findByEmail(dto.email());
         if (existingUser.isPresent()) {
-            throw new IllegalArgumentException("email already exists");
+            throw new BusinessException("email already exists");
         }
 
         User user = new User(
