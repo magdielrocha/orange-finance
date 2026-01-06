@@ -5,16 +5,22 @@ import br.mag.dev.orange_finance.domain.model.User;
 import br.mag.dev.orange_finance.exception.BusinessException;
 import br.mag.dev.orange_finance.repository.UserRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository,
+                       PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
+
+
 
     @Transactional
     public User createUser(CreateUserDto dto) {
@@ -27,7 +33,7 @@ public class UserService {
         User user = new User(
                 dto.fullName(),
                 dto.email(),
-                dto.password(),
+                passwordEncoder.encode(dto.password()),
                 dto.userRole()
         );
 
