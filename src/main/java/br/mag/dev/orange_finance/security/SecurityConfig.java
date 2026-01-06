@@ -17,8 +17,10 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/users").permitAll()
                         .requestMatchers("/transactions").permitAll()
+                        .requestMatchers("/h2-console/**").permitAll()
                         .anyRequest().authenticated()
-                );
+                )
+                .headers(headers -> headers.frameOptions(frame -> frame.disable()));
         return http.build();
     }
 }
