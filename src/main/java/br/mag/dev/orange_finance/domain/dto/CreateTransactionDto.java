@@ -23,10 +23,7 @@ public record CreateTransactionDto(@NotBlank
                                    @NotNull
                                    LocalDate transactionDate,
 
-                                   @DecimalMin("0.01") @NotNull
-                                   BigDecimal amount,
-
+                                   @DecimalMin("0.01")
                                    @NotNull
-                                   Long userId
-                                   ) {
+                                   BigDecimal amount) {
 }

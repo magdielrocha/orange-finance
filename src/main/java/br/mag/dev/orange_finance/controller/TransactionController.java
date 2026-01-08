@@ -3,10 +3,13 @@ package br.mag.dev.orange_finance.controller;
 import br.mag.dev.orange_finance.domain.dto.CreateTransactionDto;
 import br.mag.dev.orange_finance.domain.dto.TransactionResponseDto;
 import br.mag.dev.orange_finance.domain.model.Transaction;
+import br.mag.dev.orange_finance.security.UserDetailsImpl;
 import br.mag.dev.orange_finance.service.TransactionService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,10 +25,14 @@ public class TransactionController {
         this.transactionService = transactionService;
     }
 
+    @PreAuthorize("hasRole('USER')")
    @PostMapping
-   public ResponseEntity<TransactionResponseDto> create(@RequestBody @Valid CreateTransactionDto dto) {
+   public ResponseEntity<TransactionResponseDto> create(
+           @RequestBody @Valid CreateTransactionDto dto,
+           @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
-    var transaction = transactionService.createTransaction(dto);
+        Transaction transaction = transactionService.createTransaction(
+            dto, userDetails.getUser());
 
     return ResponseEntity
             .status(HttpStatus.CREATED)

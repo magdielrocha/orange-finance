@@ -3,6 +3,7 @@ package br.mag.dev.orange_finance.service;
 import br.mag.dev.orange_finance.domain.dto.CreateTransactionDto;
 import br.mag.dev.orange_finance.domain.enums.TransactionType;
 import br.mag.dev.orange_finance.domain.model.Transaction;
+import br.mag.dev.orange_finance.domain.model.User;
 import br.mag.dev.orange_finance.exception.BusinessException;
 import br.mag.dev.orange_finance.exception.ResourceNotFoundException;
 import br.mag.dev.orange_finance.repository.TransactionRepository;
@@ -22,10 +23,7 @@ public class TransactionService {
     }
 
     @Transactional
-    public Transaction createTransaction(CreateTransactionDto dto) {
-
-        var user = userRepository.findById(dto.userId())
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+    public Transaction createTransaction(CreateTransactionDto dto, User user) {
 
         if(dto.transactionType() == TransactionType.EXPENSE && dto.expenseCategory() == null) {
             throw  new BusinessException("Expense category is required for EXPENSE transactions");
