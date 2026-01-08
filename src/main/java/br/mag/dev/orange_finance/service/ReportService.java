@@ -30,17 +30,14 @@ public class ReportService {
         List<Transaction> transactions =
                 transactionRepository.findByUserId(user.getId());
 
-        BigDecimal totalIncome = transactions
-                .stream()
-                .filter(t -> t.getTransactionType() == TransactionType.INCOME)
-                .map(Transaction::getAmount)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
 
-        BigDecimal totalExpense = transactions
-                .stream()
-                .filter(t -> t.getTransactionType() == TransactionType.EXPENSE)
-                .map(Transaction::getAmount)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        BigDecimal totalIncome =
+                transactionRepository.sumByUserAndType(
+                        user.getId(), TransactionType.INCOME);
+
+        BigDecimal totalExpense =
+                transactionRepository.sumByUserAndType(
+                        user.getId(), TransactionType.EXPENSE);
 
         BigDecimal balance = totalIncome.subtract(totalExpense);
 
