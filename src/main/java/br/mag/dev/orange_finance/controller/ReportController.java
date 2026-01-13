@@ -5,10 +5,12 @@ import br.mag.dev.orange_finance.domain.dto.report.CategorySummaryDto;
 import br.mag.dev.orange_finance.domain.dto.report.FinancialSummaryDto;
 import br.mag.dev.orange_finance.security.UserDetailsImpl;
 import br.mag.dev.orange_finance.service.ReportService;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -41,6 +43,20 @@ public class ReportController {
                 reportService.getExpenseSummaryByCategory(userDetails.getUser());
 
         return ResponseEntity.ok(result);
+    }
+
+
+    @GetMapping("/summary-by-period")
+    public ResponseEntity<FinancialSummaryDto> summaryByPeriod(
+            @RequestParam int year,
+            @RequestParam int month,
+            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+
+        var summary = reportService.getFinancialSummaryByPeriod(
+                userDetails.getUser(), year, month);
+
+        return ResponseEntity.ok(summary);
+
     }
 
 

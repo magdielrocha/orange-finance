@@ -9,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 
 @Repository
@@ -36,5 +37,18 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
     group by t.expenseCategory
     """)
     List<CategorySummaryDto> getExpenseSummaryByCategory(@Param("userId") Long userId);
+
+
+    @Query("""
+    select t
+    from Transaction t
+    where t.user.id = :userId
+      and t.transactionDate between :start and :end
+    """)
+    List<Transaction> findByUserAndPeriod(
+            @Param("userId") Long userId,
+            @Param("startDate")LocalDate startDate,
+            @Param("endDate")LocalDate endDate
+            );
 
 }

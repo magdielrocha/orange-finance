@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -52,6 +53,39 @@ public class ReportService {
     public List<CategorySummaryDto> getExpenseSummaryByCategory(User user) {
         return transactionRepository
                 .getExpenseSummaryByCategory(user.getId());
+    }
+
+
+    @Transactional(readOnly = true)
+    public FinancialSummaryDto getFinancialSummaryByPeriod(
+            User user,
+            int year,
+            int month
+    ) {
+        LocalDate startDate = LocalDate.of(year, month, 1);
+        LocalDate endDate = startDate.withDayOfMonth(startDate.lengthOfMonth());
+
+        List<Transaction> transactions =
+                transactionRepository.findByUserAndPeriod(
+                        user.getId(),
+                        startDate,
+                        endDate);
+
+        BigDecimal totalIncome = transactions.stream()
+                .filter(t -> t.getTransactionType() == TransactionType.INCOME)
+                .map(Transaction::getAmount)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        BigDecimal totalExpense = transactions.stream()
+                .filter(t -> t.getTransactionType() == TransactionType.EXPENSE)
+                .map(Transaction::getAmount)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        return new FinancialSummaryDto(
+                totalIncome,
+                totalExpense,
+                totalIncome.subtract(totalExpense)
+        );
     }
 
 
