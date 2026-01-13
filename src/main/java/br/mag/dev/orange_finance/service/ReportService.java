@@ -1,14 +1,14 @@
 package br.mag.dev.orange_finance.service;
 
 
-import br.mag.dev.orange_finance.domain.dto.FinancialSummaryDto;
+import br.mag.dev.orange_finance.domain.dto.report.CategorySummaryDto;
+import br.mag.dev.orange_finance.domain.dto.report.FinancialSummaryDto;
 import br.mag.dev.orange_finance.domain.enums.TransactionType;
 import br.mag.dev.orange_finance.domain.model.Transaction;
 import br.mag.dev.orange_finance.domain.model.User;
 import br.mag.dev.orange_finance.repository.TransactionRepository;
-import br.mag.dev.orange_finance.repository.UserRepository;
-import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -16,15 +16,15 @@ import java.util.List;
 @Service
 public class ReportService {
 
-    private final UserRepository userRepository;
+
     private final TransactionRepository transactionRepository;
 
-    public ReportService(UserRepository userRepository, TransactionRepository transactionRepository) {
-        this.userRepository = userRepository;
+    public ReportService(TransactionRepository transactionRepository) {
+
         this.transactionRepository = transactionRepository;
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public FinancialSummaryDto getFinancialSummary(User user) {
 
         List<Transaction> transactions =
@@ -47,4 +47,12 @@ public class ReportService {
                 balance
         );
     }
+
+    @Transactional(readOnly = true)
+    public List<CategorySummaryDto> getExpenseSummaryByCategory(User user) {
+        return transactionRepository
+                .getExpenseSummaryByCategory(user.getId());
+    }
+
+
 }

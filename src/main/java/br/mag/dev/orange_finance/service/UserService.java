@@ -1,12 +1,12 @@
 package br.mag.dev.orange_finance.service;
 
-import br.mag.dev.orange_finance.domain.dto.CreateUserDto;
+import br.mag.dev.orange_finance.domain.dto.user.CreateUserDto;
 import br.mag.dev.orange_finance.domain.model.User;
 import br.mag.dev.orange_finance.exception.BusinessException;
 import br.mag.dev.orange_finance.repository.UserRepository;
-import jakarta.transaction.Transactional;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class UserService {

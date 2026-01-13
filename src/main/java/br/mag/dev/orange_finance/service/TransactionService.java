@@ -1,28 +1,21 @@
 package br.mag.dev.orange_finance.service;
 
-import br.mag.dev.orange_finance.domain.dto.CreateTransactionDto;
-import br.mag.dev.orange_finance.domain.dto.FinancialSummaryDto;
+import br.mag.dev.orange_finance.domain.dto.transaction.CreateTransactionDto;
 import br.mag.dev.orange_finance.domain.enums.TransactionType;
 import br.mag.dev.orange_finance.domain.model.Transaction;
 import br.mag.dev.orange_finance.domain.model.User;
 import br.mag.dev.orange_finance.exception.BusinessException;
-import br.mag.dev.orange_finance.exception.ResourceNotFoundException;
 import br.mag.dev.orange_finance.repository.TransactionRepository;
-import br.mag.dev.orange_finance.repository.UserRepository;
-import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
-
-import java.math.BigDecimal;
-import java.util.List;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class TransactionService {
 
-    private final UserRepository userRepository;
+
     private final TransactionRepository transactionRepository;
 
-    public TransactionService(UserRepository userRepository, TransactionRepository transactionRepository) {
-        this.userRepository = userRepository;
+    public TransactionService(TransactionRepository transactionRepository) {
         this.transactionRepository = transactionRepository;
     }
 

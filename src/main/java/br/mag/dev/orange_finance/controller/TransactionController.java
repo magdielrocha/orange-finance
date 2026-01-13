@@ -1,7 +1,7 @@
 package br.mag.dev.orange_finance.controller;
 
-import br.mag.dev.orange_finance.domain.dto.CreateTransactionDto;
-import br.mag.dev.orange_finance.domain.dto.TransactionResponseDto;
+import br.mag.dev.orange_finance.domain.dto.transaction.CreateTransactionDto;
+import br.mag.dev.orange_finance.domain.dto.transaction.TransactionResponseDto;
 import br.mag.dev.orange_finance.domain.model.Transaction;
 import br.mag.dev.orange_finance.security.UserDetailsImpl;
 import br.mag.dev.orange_finance.service.TransactionService;

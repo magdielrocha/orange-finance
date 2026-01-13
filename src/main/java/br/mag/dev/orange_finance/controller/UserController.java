@@ -1,7 +1,7 @@
 package br.mag.dev.orange_finance.controller;
 
-import br.mag.dev.orange_finance.domain.dto.CreateUserDto;
-import br.mag.dev.orange_finance.domain.dto.UserResponseDto;
+import br.mag.dev.orange_finance.domain.dto.user.CreateUserDto;
+import br.mag.dev.orange_finance.domain.dto.user.UserResponseDto;
 import br.mag.dev.orange_finance.security.UserDetailsImpl;
 import br.mag.dev.orange_finance.service.UserService;
 import jakarta.validation.Valid;
