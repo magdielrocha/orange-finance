@@ -1,4 +1,4 @@
-package br.mag.dev.orange_finance.domain.dto;
+package br.mag.dev.orange_finance.domain.dto.report;
 
 import java.math.BigDecimal;
 

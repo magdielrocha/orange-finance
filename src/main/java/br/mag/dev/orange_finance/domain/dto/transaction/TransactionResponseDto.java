@@ -1,4 +1,4 @@
-package br.mag.dev.orange_finance.domain.dto;
+package br.mag.dev.orange_finance.domain.dto.transaction;
 
 import br.mag.dev.orange_finance.domain.enums.ExpenseCategory;
 import br.mag.dev.orange_finance.domain.enums.IncomeSource;

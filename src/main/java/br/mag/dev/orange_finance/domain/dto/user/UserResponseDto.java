@@ -1,4 +1,4 @@
-package br.mag.dev.orange_finance.domain.dto;
+package br.mag.dev.orange_finance.domain.dto.user;
 
 import br.mag.dev.orange_finance.domain.enums.UserRole;
 import br.mag.dev.orange_finance.domain.model.User;
