@@ -5,7 +5,6 @@ import br.mag.dev.orange_finance.domain.dto.report.CategorySummaryDto;
 import br.mag.dev.orange_finance.domain.dto.report.FinancialSummaryDto;
 import br.mag.dev.orange_finance.security.UserDetailsImpl;
 import br.mag.dev.orange_finance.service.ReportService;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
