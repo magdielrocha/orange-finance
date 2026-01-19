@@ -3,6 +3,7 @@ package br.mag.dev.orange_finance.service;
 
 import br.mag.dev.orange_finance.domain.dto.report.CategorySummaryDto;
 import br.mag.dev.orange_finance.domain.dto.report.FinancialSummaryDto;
+import br.mag.dev.orange_finance.domain.dto.report.MonthlyEvolutionDto;
 import br.mag.dev.orange_finance.domain.enums.TransactionType;
 import br.mag.dev.orange_finance.domain.model.Transaction;
 import br.mag.dev.orange_finance.domain.model.User;
@@ -86,6 +87,31 @@ public class ReportService {
                 totalExpense,
                 totalIncome.subtract(totalExpense)
         );
+    }
+
+    @Transactional(readOnly = true)
+    public List<MonthlyEvolutionDto> getMonthlyEvolution(
+            User user,
+            Integer startYear,
+            Integer startMonth,
+            Integer endYear,
+            Integer endMonth
+    ) {
+
+        if (startYear == null || startMonth == null ||
+                 endYear == null || endMonth == null) {
+
+            return transactionRepository.findMonthlyEvolutionByUser(user.getId());
+        }
+
+        LocalDate start = LocalDate.of(startYear, startMonth, 1);
+        LocalDate end = LocalDate.of(endYear, endMonth, 1)
+                .withDayOfMonth(
+                        LocalDate.of(endYear, endMonth, 1).lengthOfMonth()
+                );
+
+        return transactionRepository.findMonthlyEvolutionByUserAndPeriod(
+                user.getId(), start, end);
     }
 
 
