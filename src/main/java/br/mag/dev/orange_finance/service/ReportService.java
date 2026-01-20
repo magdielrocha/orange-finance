@@ -2,6 +2,7 @@ package br.mag.dev.orange_finance.service;
 
 
 import br.mag.dev.orange_finance.domain.dto.report.CategorySummaryDto;
+import br.mag.dev.orange_finance.domain.dto.report.ExpenseExcelRowDto;
 import br.mag.dev.orange_finance.domain.dto.report.FinancialSummaryDto;
 import br.mag.dev.orange_finance.domain.dto.report.MonthlyEvolutionDto;
 import br.mag.dev.orange_finance.domain.enums.TransactionType;
@@ -114,5 +115,8 @@ public class ReportService {
                 user.getId(), start, end);
     }
 
-
+    @Transactional(readOnly = true)
+    public List<ExpenseExcelRowDto> getExpenseReportForExcel(User user) {
+        return transactionRepository.findExpenseSummaryForExcel(user.getId());
+    }
 }

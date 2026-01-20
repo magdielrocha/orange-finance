@@ -1,6 +1,7 @@
 package br.mag.dev.orange_finance.repository;
 
 import br.mag.dev.orange_finance.domain.dto.report.CategorySummaryDto;
+import br.mag.dev.orange_finance.domain.dto.report.ExpenseExcelRowDto;
 import br.mag.dev.orange_finance.domain.dto.report.MonthlyEvolutionDto;
 import br.mag.dev.orange_finance.domain.enums.TransactionType;
 import br.mag.dev.orange_finance.domain.model.Transaction;
@@ -88,5 +89,19 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
             @Param("end") LocalDate end
     );
 
+    @Query("""
+    select new br.mag.dev.orange_finance.domain.dto.report.ExpenseExcelRowDto(
+        cast(t.expenseCategory as string),
+        sum(t.amount)
+    )
+    from Transaction t
+    where t.user.id = :userId
+      and t.transactionType = 'EXPENSE'
+    group by t.expenseCategory
+    order by t.expenseCategory
+    """)
+    List<ExpenseExcelRowDto> findExpenseSummaryForExcel(
+            @Param("userId") Long userId
+    );
 
 }

@@ -4,11 +4,13 @@ package br.mag.dev.orange_finance.controller;
 import br.mag.dev.orange_finance.domain.dto.report.CategorySummaryDto;
 import br.mag.dev.orange_finance.domain.dto.report.FinancialSummaryDto;
 import br.mag.dev.orange_finance.domain.dto.report.MonthlyEvolutionDto;
+import br.mag.dev.orange_finance.infra.ExpenseExcelExporter;
 import br.mag.dev.orange_finance.security.UserDetailsImpl;
 import br.mag.dev.orange_finance.service.ReportService;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -79,6 +81,23 @@ public class ReportController {
 
         return ResponseEntity.ok(result);
     }
+
+    @GetMapping("/expenses/excel")
+    public ResponseEntity<byte[]> exportExpensesExcel(
+            @AuthenticationPrincipal UserDetailsImpl userDetails
+    ) {
+        var data = reportService.getExpenseReportForExcel(userDetails.getUser());
+
+        var exporter = new ExpenseExcelExporter();
+        byte[] file = exporter.export(data);
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=expenses.xlsx")
+                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                .body(file);
+    }
+
+
 
 
 
