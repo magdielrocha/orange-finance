@@ -5,6 +5,7 @@ import br.mag.dev.orange_finance.domain.dto.report.CategorySummaryDto;
 import br.mag.dev.orange_finance.domain.dto.report.FinancialSummaryDto;
 import br.mag.dev.orange_finance.domain.dto.report.MonthlyEvolutionDto;
 import br.mag.dev.orange_finance.infra.ExpenseExcelExporter;
+import br.mag.dev.orange_finance.infra.IncomeExcelExporter;
 import br.mag.dev.orange_finance.security.UserDetailsImpl;
 import br.mag.dev.orange_finance.service.ReportService;
 import org.springframework.http.HttpHeaders;
@@ -96,6 +97,24 @@ public class ReportController {
                 .contentType(MediaType.APPLICATION_OCTET_STREAM)
                 .body(file);
     }
+
+
+    @GetMapping("/income/excel")
+    public ResponseEntity<byte[]> exportIncomeExcel(
+            @AuthenticationPrincipal UserDetailsImpl userDetails
+    ) {
+        var  data = reportService.getIncomeReportForExcel(userDetails.getUser());
+
+        var exporter = new IncomeExcelExporter();
+        byte[] file = exporter.export(data);
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=income.xlsx")
+                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                .body(file);
+
+    }
+
 
 
 
