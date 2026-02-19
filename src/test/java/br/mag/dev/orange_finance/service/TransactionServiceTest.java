@@ -7,6 +7,7 @@ import br.mag.dev.orange_finance.domain.enums.IncomeSource;
 import br.mag.dev.orange_finance.domain.enums.TransactionType;
 import br.mag.dev.orange_finance.domain.model.Transaction;
 import br.mag.dev.orange_finance.domain.model.User;
+import br.mag.dev.orange_finance.exception.BusinessException;
 import br.mag.dev.orange_finance.repository.TransactionRepository;
 import br.mag.dev.orange_finance.repository.UserRepository;
 import org.junit.jupiter.api.Test;
@@ -19,30 +20,28 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import static org.hibernate.validator.internal.util.Contracts.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
 public class TransactionServiceTest {
 
-    @InjectMocks
-    private TransactionService transactionService;
-
-    @Mock
-    private UserRepository userRepository;
 
     @Mock
     private TransactionRepository transactionRepository;
+
+    @InjectMocks
+    private TransactionService transactionService;
+
+    private User user;
 
 
     @Test
     public void shouldCreateTransaction() {
 
-        User user =  new  User();
+        user =  new  User();
         user.setId(1L);
 
         CreateTransactionDto dto = new CreateTransactionDto(
@@ -71,7 +70,7 @@ public class TransactionServiceTest {
     @Test
     public void shouldCreateExpenseTransaction() {
 
-        User user = new User();
+        user = new User();
         user.setId(1L);
 
         CreateTransactionDto dto = new CreateTransactionDto(
@@ -99,5 +98,27 @@ public class TransactionServiceTest {
 
     }
 
+    @Test
+    public void shouldThrowExceptionWhenExpenseHasIncomeSource() {
+
+        user = new User();
+        user.setId(1L);
+
+        CreateTransactionDto dto = new CreateTransactionDto(
+                "Erro",
+                TransactionType.EXPENSE,
+                ExpenseCategory.FOOD,
+                IncomeSource.SALARY,
+                LocalDate.of(2025, 02, 03),
+                new BigDecimal("100.00")
+
+        );
+
+        assertThrows(BusinessException.class,
+                () -> transactionService.createTransaction(dto, user));
+
+        verify(transactionRepository, never()).save(any());
+
+    }
 
 }
