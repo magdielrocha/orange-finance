@@ -2,6 +2,7 @@ package br.mag.dev.orange_finance.service;
 
 
 import br.mag.dev.orange_finance.domain.dto.transaction.CreateTransactionDto;
+import br.mag.dev.orange_finance.domain.enums.ExpenseCategory;
 import br.mag.dev.orange_finance.domain.enums.IncomeSource;
 import br.mag.dev.orange_finance.domain.enums.TransactionType;
 import br.mag.dev.orange_finance.domain.model.Transaction;
@@ -13,9 +14,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Optional;
+
 import static org.hibernate.validator.internal.util.Contracts.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -65,4 +67,37 @@ public class TransactionServiceTest {
 
         verify(transactionRepository).save(any(Transaction.class));
     }
+
+    @Test
+    public void shouldCreateExpenseTransaction() {
+
+        User user = new User();
+        user.setId(1L);
+
+        CreateTransactionDto dto = new CreateTransactionDto(
+                "Almoço",
+                TransactionType.EXPENSE,
+                ExpenseCategory.FOOD,
+                null,
+                LocalDate.of(2025, 02, 02),
+                new BigDecimal("50.00")
+
+        );
+
+        when(transactionRepository.save(any(Transaction.class)))
+                .thenAnswer( invocation -> invocation.getArgument(0));
+
+        Transaction result = transactionService.createTransaction(dto, user);
+
+        assertNotNull(result);
+        assertEquals(TransactionType.EXPENSE, result.getTransactionType());
+        assertEquals(ExpenseCategory.FOOD, result.getExpenseCategory());
+        assertEquals(LocalDate.of(2025, 02, 02), result.getTransactionDate());
+        assertNull(result.getIncomeSource());
+
+        verify(transactionRepository).save(any(Transaction.class));
+
+    }
+
+
 }
