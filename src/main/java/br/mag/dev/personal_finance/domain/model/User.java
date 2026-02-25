@@ -2,9 +2,11 @@ package br.mag.dev.personal_finance.domain.model;
 
 import br.mag.dev.personal_finance.domain.enums.UserRole;
 import jakarta.persistence.*;
+import lombok.EqualsAndHashCode;
 
 
 @Entity
+@EqualsAndHashCode(of = "id")
 @Table (name = "tb_user")
 public class User {
 
