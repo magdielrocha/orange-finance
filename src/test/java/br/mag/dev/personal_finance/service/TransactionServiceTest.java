@@ -7,6 +7,7 @@ import br.mag.dev.personal_finance.domain.enums.ExpenseCategory;
 import br.mag.dev.personal_finance.domain.enums.TransactionType;
 import br.mag.dev.personal_finance.domain.model.Transaction;
 import br.mag.dev.personal_finance.domain.model.User;
+import br.mag.dev.personal_finance.exception.BusinessException;
 import br.mag.dev.personal_finance.repository.TransactionRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -38,7 +39,7 @@ public class TransactionServiceTest {
     @Test
     void shouldCreateTrasactionSuccessfully() {
         CreateTransactionDto dto = new CreateTransactionDto(
-                "Salary",
+                "Test",
                 TransactionType.EXPENSE,
                 ExpenseCategory.FOOD,
                 null,
@@ -68,4 +69,48 @@ public class TransactionServiceTest {
 
         verify(transactionRepository, times(1)).save(any(Transaction.class));
     }
+
+    @Test
+    void shouldThrowExceptionWhenRepositoryFails() {
+        CreateTransactionDto dto = new CreateTransactionDto(
+                "Test",
+                TransactionType.EXPENSE,
+                ExpenseCategory.FOOD,
+                null,
+                LocalDate.now(),
+                BigDecimal.TEN
+        );
+
+
+        when(transactionRepository.save(any(Transaction.class)))
+                .thenThrow(new RuntimeException("DB Error"));
+
+        RuntimeException exception = assertThrows(RuntimeException.class, () ->
+                transactionService.createTransaction(dto,  user)
+        );
+
+        assertEquals("DB Error", exception.getMessage());
+
+        verify(transactionRepository, times(1)).save(any(Transaction.class));
+
+    }
+
+    @Test
+    void shouldNotCallRepositoryWhenDomainThrowsException(){
+        CreateTransactionDto invalidDto = new CreateTransactionDto(
+                "Test",
+                TransactionType.EXPENSE,
+                ExpenseCategory.FOOD,
+                null,
+                LocalDate.now(),
+                BigDecimal.TEN.negate()
+        );
+
+        assertThrows(BusinessException.class, () ->
+                transactionService.createTransaction(invalidDto,  user));
+
+        verify(transactionRepository, never()).save(any());
+
+    }
+
 }
